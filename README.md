@@ -1,0 +1,2 @@
+# NivelatorioAritmeticoAgropecuario_2026_version1
+Aplicación para mejoramiento de procesos aritméticos con números
