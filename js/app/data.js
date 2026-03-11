@@ -133,6 +133,9 @@ var xr = [
     { id: "corchetes", title: "Con Corchetes", icon: "[]", type: "expr" },
     { id: "llaves", title: "Con Llaves", icon: "{}", type: "expr" },
     { id: "signos", title: "Signos", icon: "+-", type: "expr" },
+    { id: "signos_par", title: "Signos + ( )", icon: "-()", type: "expr" },
+    { id: "signos_cor", title: "Signos + [ ]", icon: "-[]", type: "expr" },
+    { id: "signos_lla", title: "Signos + { }", icon: "-{}", type: "expr" },
     {
       id: "tienda",
       title: "Tienda",

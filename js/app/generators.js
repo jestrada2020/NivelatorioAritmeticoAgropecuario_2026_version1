@@ -59,6 +59,55 @@ var qf = (C) => {
       ],
     };
   }
+  if (C === "signos_par") {
+    const a = Math.floor(Math.random() * 9) + 2,
+      b = Math.floor(Math.random() * 9) + 2,
+      c = Math.floor(Math.random() * 5) + 2;
+    return {
+      expr: `(${a} - (-${b})) × ${c}`,
+      answer: (a + b) * c,
+      steps: [
+        `-(-${b}) = +${b}`,
+        `${a} + ${b} = ${a + b}`,
+        `${a + b} × ${c} = ${(a + b) * c}`,
+      ],
+    };
+  }
+  if (C === "signos_cor") {
+    const a = Math.floor(Math.random() * 10) + 5,
+      b = Math.floor(Math.random() * 4) + 2,
+      c = Math.floor(Math.random() * 3) + 1,
+      d = Math.floor(Math.random() * 4) + 2;
+    const inner = a + b - c;
+    return {
+      expr: `[${a} - (-${b} + ${c})] × ${d}`,
+      answer: inner * d,
+      steps: [
+        `-(-${b} + ${c}) = +${b} - ${c}`,
+        `${a} + ${b} - ${c} = ${inner}`,
+        `${inner} × ${d} = ${inner * d}`,
+      ],
+    };
+  }
+  if (C === "signos_lla") {
+    const a = Math.floor(Math.random() * 5) + 2,
+      b = Math.floor(Math.random() * 5) + 1,
+      c = Math.floor(Math.random() * 3) + 2,
+      d = Math.floor(Math.random() * 5) + 1;
+    const s1 = a + b,
+      s2 = s1 * c,
+      ans = s2 + d;
+    return {
+      expr: `{[(${a} - (-${b})) × ${c}] + ${d}}`,
+      answer: ans,
+      steps: [
+        `-(-${b}) = +${b}`,
+        `${a} + ${b} = ${s1}`,
+        `${s1} × ${c} = ${s2}`,
+        `${s2} + ${d} = ${ans}`,
+      ],
+    };
+  }
   const P = Math.floor(Math.random() * 10) + 1;
   return {
     expr: `5 - (-${P})`,
