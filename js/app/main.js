@@ -110,6 +110,34 @@ function bf() {
       const S = f.problemas || [];
       (b(S[Math.floor(Math.random() * S.length)]), P("prob"));
     },
+    ttf = (f) => {
+      O(f);
+      const S = f.problemas || [];
+      b(S[Math.floor(Math.random() * S.length)]); Z(["",""]); J(0); P("probfrac");
+    },
+    hpf = (key) => {
+      if (!Ce) return;
+      if (key === "⌫") { const y = [...q]; y[I] = y[I].slice(0,-1); Z(y); return; }
+      if (key === "✓") {
+        if (!q[I]) return;
+        if (I === 1 && parseInt(q[I]) === 0) return;
+        if (I === 0) { J(1); return; }
+        const iN = parseInt(q[0]), iD = parseInt(q[1]);
+        const g = _gcd(Math.abs(iN), iD);
+        je(d.id, (iN/g) === Ce.respuesta.n && (iD/g) === Ce.respuesta.d);
+        J(-1); return;
+      }
+      if (q[I].length >= 4) return;
+      const y = [...q]; y[I] = y[I] + key; Z(y);
+    },
+    rfrac = (texto) => {
+      const parts = texto.split(/\[(\d+)\/(\d+)\]/);
+      return parts.reduce((acc, p, i) => {
+        if (i % 3 === 0) { if (p) acc.push(v.jsx("span", { children: p }, "t" + i)); }
+        else if (i % 3 === 1) { acc.push(fracFn(parseInt(p), parseInt(parts[i+1]), "", true)); }
+        return acc;
+      }, []);
+    },
     nt = (f) => {
       if (!E) return;
       const S = I,
@@ -1196,6 +1224,33 @@ function bf() {
                     className: "bg-teal-600 p-6 rounded-2xl text-left",
                     children: [
                       v.jsx("div", { className: "text-3xl mb-2", children: f.icon }),
+                      v.jsx("div", { className: "font-bold", children: f.title }),
+                    ],
+                  }, f.id),
+                ),
+            }),
+            v.jsx("h3", { className: "text-xl font-bold mt-6 mb-4", children: "Problemas con Fracciones" }),
+            v.jsx("div", {
+              className: "grid grid-cols-2 gap-4",
+              children: xr
+                .filter((f) => f.type === "probfrac")
+                .map((f) =>
+                  v.jsxs("button", {
+                    onClick: () => ttf(f),
+                    className: "bg-indigo-600 p-6 rounded-2xl text-left",
+                    children: [
+                      v.jsxs("div", {
+                        className: "flex items-center gap-3 mb-2",
+                        children: [
+                          v.jsx("div", { className: "text-3xl", children: f.icon }),
+                          v.jsxs("div", { className: "inline-flex flex-col items-center font-mono text-xl",
+                            children: [
+                              v.jsx("div", { className: "border-b-2 border-white px-1 leading-tight", children: "a" }),
+                              v.jsx("div", { className: "px-1 leading-tight", children: "b" }),
+                            ],
+                          }),
+                        ],
+                      }),
                       v.jsx("div", { className: "font-bold", children: f.title }),
                     ],
                   }, f.id),
@@ -2453,6 +2508,87 @@ function bf() {
                     }),
                   ],
                 }),
+              ],
+            }),
+          ],
+        }),
+      C === "probfrac" && Ce &&
+        v.jsxs("main", {
+          className: "max-w-2xl mx-auto p-6",
+          children: [
+            v.jsx("button", { onClick: () => P("probs"), className: "mb-4 text-blue-300", children: "Salir" }),
+            v.jsxs("div", {
+              className: "bg-white/10 p-6 rounded-2xl",
+              children: [
+                v.jsx("div", { className: "text-3xl mb-4", children: d == null ? void 0 : d.icon }),
+                v.jsxs("div", {
+                  className: "bg-yellow-600/20 border border-yellow-500 p-4 rounded-xl mb-6",
+                  children: [
+                    v.jsx("div", { className: "text-sm text-yellow-200 mb-2", children: "PROBLEMA:" }),
+                    v.jsx("div", { className: "text-lg flex flex-wrap items-center gap-1", children: rfrac(Ce.texto) }),
+                  ],
+                }),
+                v.jsx("div", { className: "text-center text-white/60 mb-3", children: "Escribe la respuesta como fracción:" }),
+                v.jsxs("div", { className: "flex justify-center mb-5",
+                  children: [
+                    I === -1
+                      ? (() => {
+                          const iN = parseInt(q[0]), iD = parseInt(q[1]);
+                          const g = _gcd(Math.abs(iN), iD);
+                          const ok = (iN/g) === Ce.respuesta.n && (iD/g) === Ce.respuesta.d;
+                          return fracFn(q[0], q[1], ok ? "ok" : "err");
+                        })()
+                      : fracFn(
+                          q[0] !== "" ? q[0] : (I === 0 ? "?" : "_"),
+                          I >= 1 ? (q[1] !== "" ? q[1] : "?") : "?",
+                          I === 0 ? "n" : "d"
+                        ),
+                  ],
+                }),
+                I !== -1 && v.jsxs("div", {
+                  children: [
+                    v.jsx("div", { className: "text-center text-blue-200 mb-3",
+                      children: I === 0 ? "Ingresa el numerador:" : "Ingresa el denominador:",
+                    }),
+                    v.jsx("div", {
+                      className: "grid grid-cols-5 gap-2 max-w-xs mx-auto mb-3",
+                      children: [1,2,3,4,5,6,7,8,9,0].map((n) =>
+                        v.jsx("button", {
+                          onClick: () => hpf(String(n)),
+                          className: "bg-white/20 p-4 rounded-xl text-2xl font-bold",
+                          children: n,
+                        }, n),
+                      ),
+                    }),
+                    v.jsxs("div", { className: "flex gap-3 max-w-xs mx-auto",
+                      children: [
+                        v.jsx("button", { onClick: () => hpf("⌫"), className: "flex-1 bg-gray-600 py-3 rounded-xl text-xl", children: "⌫" }),
+                        v.jsx("button", { onClick: () => hpf("✓"), className: "flex-1 bg-green-600 py-3 rounded-xl text-xl font-bold", children: "✓" }),
+                      ],
+                    }),
+                  ],
+                }),
+                I === -1 && (() => {
+                  const iN = parseInt(q[0]), iD = parseInt(q[1]);
+                  const g = _gcd(Math.abs(iN), iD);
+                  const ok = (iN/g) === Ce.respuesta.n && (iD/g) === Ce.respuesta.d;
+                  return v.jsxs("div", { className: "text-center",
+                    children: [
+                      ok
+                        ? v.jsx("div", { className: "text-3xl text-green-400 font-bold mb-4", children: "¡Correcto! ✓" })
+                        : v.jsxs("div", { className: "mb-4",
+                            children: [
+                              v.jsx("div", { className: "text-2xl text-red-400 font-bold mb-2", children: "Incorrecto ✗" }),
+                              v.jsxs("div", { className: "flex justify-center items-center gap-2 text-blue-200",
+                                children: ["Respuesta correcta: ", fracFn(Ce.respuesta.n, Ce.respuesta.d, "ok")],
+                              }),
+                            ],
+                          }),
+                      v.jsx("button", { onClick: () => ttf(d), className: "w-full bg-green-600 py-4 rounded-xl font-bold mb-3", children: "Nuevo Problema" }),
+                      v.jsx("button", { onClick: () => { Z(["",""]); J(0); }, className: "w-full bg-blue-600 py-3 rounded-xl", children: "Reintentar" }),
+                    ],
+                  });
+                })(),
               ],
             }),
           ],
